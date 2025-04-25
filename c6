@@ -1,0 +1,44 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct {
+    int numStudents;
+    float *testScores;
+} ClassGrades;
+
+int main() {
+    ClassGrades myClass;
+    printf("Ingrese el número de estudiantes: ");
+    if (scanf("%d", &myClass.numStudents) != 1 || myClass.numStudents <= 0) {
+        fprintf(stderr, "Número de estudiantes inválido.\n");
+        return 1;
+    }
+
+    myClass.testScores = (float *)malloc(sizeof(float) * myClass.numStudents);
+    if (myClass.testScores == NULL) {
+        fprintf(stderr, "Error al asignar memoria.\n");
+        return 1;
+    }
+
+    printf("Ingrese las calificaciones:\n");
+    for (int i = 0; i < myClass.numStudents; ++i) {
+        printf("Estudiante %d: ", i + 1);
+        if (scanf("%f", &myClass.testScores[i]) != 1) {
+            fprintf(stderr, "Entrada inválida.\n");
+            free(myClass.testScores);
+            return 1;
+        }
+    }
+
+    float highest = myClass.testScores[0];
+    for (int i = 1; i < myClass.numStudents; ++i) {
+        if (myClass.testScores[i] > highest) {
+            highest = myClass.testScores[i];
+        }
+    }
+
+    printf("La calificación más alta es: %.2f\n", highest);
+
+    free(myClass.testScores);
+    return 0;
+}
